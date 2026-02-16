@@ -9,6 +9,7 @@ class Nivel4Scene extends Phaser.Scene {
 
   preload() {
     this.load.setBaseURL("");
+    this.load.audio("bgMusic", "musica (1).mp3");
   }
 
   create() {
@@ -20,6 +21,10 @@ class Nivel4Scene extends Phaser.Scene {
       this.physics.world.setBounds(0, 0, w, h, true, true, true, true);
     }
     this.crearFondo(w, h);
+    this.audioManager = new AudioManager(this, "bgMusic", {
+      x: 20,
+      y: 30,
+    });
     this.crearRobot(w, h);
     this.mostrarPuzzle(this.puzzleActual);
   }
@@ -343,7 +348,23 @@ class Nivel4Scene extends Phaser.Scene {
 
     const ring = this.crearAnilloPulsante(-230, 0, 22, 0xef4444);
     const flecha = this.crearFlechaHint(-230, -40, 0, 0xef4444);
-    lever.add([ring, flecha]);
+    const manoPalanca = this.add.text(-230, 44, "👆", {
+      fontFamily: "Arial",
+      fontSize: "40px",
+      color: "#ffffff",
+    });
+    manoPalanca.setOrigin(0.5);
+    lever.add([ring, flecha, manoPalanca]);
+    this.tweens.add({
+      targets: manoPalanca,
+      y: { from: manoPalanca.y, to: manoPalanca.y + 6 },
+      scaleX: { from: 1, to: 1.08 },
+      scaleY: { from: 1, to: 0.9 },
+      duration: 600,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
+    });
   }
 
   rampaPuzzle(cont) {
@@ -473,6 +494,44 @@ class Nivel4Scene extends Phaser.Scene {
     bola.strokeCircle(-220, 40 - 10, 12);
     cont.add(bola);
 
+    const manoKnob = this.add
+      .text(-260, 8, "👆", {
+        fontFamily: "Arial",
+        fontSize: "38px",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5);
+    cont.add(manoKnob);
+    this.tweens.add({
+      targets: manoKnob,
+      y: { from: manoKnob.y, to: manoKnob.y + 7 },
+      scaleX: { from: 1, to: 1.06 },
+      scaleY: { from: 1, to: 0.92 },
+      duration: 650,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
+    });
+
+    const manoBola = this.add
+      .text(-180, 10, "👆", {
+        fontFamily: "Arial",
+        fontSize: "38px",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5);
+    cont.add(manoBola);
+    this.tweens.add({
+      targets: manoBola,
+      y: { from: manoBola.y, to: manoBola.y + 7 },
+      scaleX: { from: 1, to: 1.06 },
+      scaleY: { from: 1, to: 0.92 },
+      duration: 650,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
+    });
+
     knob.setInteractive(
       new Phaser.Geom.Circle(-220, 40, 18),
       Phaser.Geom.Circle.Contains,
@@ -588,7 +647,23 @@ class Nivel4Scene extends Phaser.Scene {
     handleInner.fillCircle(36, -2, 8);
     handleInner.fillStyle(0xffffff, 0.35);
     handleInner.fillCircle(32, -4, 3);
-    wheel.add([wg, handle, handleInner]);
+    const manoRueda = this.add.text(36, 28, "👆", {
+      fontFamily: "Arial",
+      fontSize: "38px",
+      color: "#ffffff",
+    });
+    manoRueda.setOrigin(0.5);
+    wheel.add([wg, handle, handleInner, manoRueda]);
+    this.tweens.add({
+      targets: manoRueda,
+      y: { from: manoRueda.y, to: manoRueda.y + 6 },
+      scaleX: { from: 1, to: 1.08 },
+      scaleY: { from: 1, to: 0.9 },
+      duration: 600,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
+    });
     cont.add(wheel);
 
     const goal = this.add.graphics();
@@ -1057,6 +1132,24 @@ class Nivel4Scene extends Phaser.Scene {
     const rCan = this.crearAnilloPulsante(0, 0, 20, 0xf59e0b);
     aceitero.add(rCan);
 
+    const manoAceite = this.add.text(0, 26, "👆", {
+      fontFamily: "Arial",
+      fontSize: "38px",
+      color: "#ffffff",
+    });
+    manoAceite.setOrigin(0.5);
+    aceitero.add(manoAceite);
+    this.tweens.add({
+      targets: manoAceite,
+      y: { from: manoAceite.y, to: manoAceite.y + 7 },
+      scaleX: { from: 1, to: 1.06 },
+      scaleY: { from: 1, to: 0.92 },
+      duration: 650,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
+    });
+
     const objetivos = [g1, g2, g3].map((gear, idx) => {
       const color = [0x3b82f6, 0xf59e0b, 0x10b981][idx];
       const mark = this.add.graphics();
@@ -1075,7 +1168,15 @@ class Nivel4Scene extends Phaser.Scene {
         repeat: -1,
         ease: "Sine.easeInOut",
       });
-      return { cont: gear, x: gear.x, y: gear.y, ok: false, mark };
+
+      const arrow = this.crearFlechaHint(
+        cont.x + gear.x,
+        cont.y + gear.y - 60,
+        0,
+        color,
+      );
+
+      return { cont: gear, x: gear.x, y: gear.y, ok: false, mark, arrow };
     });
 
     aceitero.setSize(70, 40);
@@ -1400,7 +1501,52 @@ class Nivel4Scene extends Phaser.Scene {
       color: "#374151",
     });
 
-    overlay.add([bg, panel, aro, estrella, estrellaS1, estrellaS2, txt, txt2]);
+    const btn = this.add.container(0, 132);
+    const btnG = this.add.graphics();
+    btnG.fillStyle(0xf97316, 1);
+    btnG.fillRoundedRect(-120, -26, 240, 52, 18);
+    btnG.lineStyle(4, 0xea580c, 1);
+    btnG.strokeRoundedRect(-120, -26, 240, 52, 18);
+    const btnTxt = this.add
+      .text(0, -4, "Volver a jugar", {
+        fontFamily: "Arial",
+        fontSize: "24px",
+        color: "#ffffff",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5);
+    btn.add([btnG, btnTxt]);
+    btn.setSize(240, 52);
+    btn.setInteractive(
+      new Phaser.Geom.Rectangle(-120, -26, 240, 52),
+      Phaser.Geom.Rectangle.Contains,
+    );
+    btn.on("pointerdown", () => {
+      this.tweens.add({
+        targets: btn,
+        scaleX: 0.95,
+        scaleY: 0.95,
+        duration: 100,
+        yoyo: true,
+        onComplete: () => {
+          overlay.destroy();
+          this.puzzleActual = 0;
+          this.mostrarPuzzle(this.puzzleActual);
+        },
+      });
+    });
+
+    overlay.add([
+      bg,
+      panel,
+      aro,
+      estrella,
+      estrellaS1,
+      estrellaS2,
+      txt,
+      txt2,
+      btn,
+    ]);
 
     this.tweens.add({
       targets: overlay,
