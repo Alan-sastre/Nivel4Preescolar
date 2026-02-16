@@ -9,17 +9,8 @@ class ContextoScene extends Phaser.Scene {
     }
 
     create() {
-        const width = this.scale.width;
-        const height = this.scale.height;
-
-        // Fondo con gradiente elegante
-        this.crearFondoElegante(width, height);
-
-        // Elementos decorativos animados
-        this.crearElementosDecorativos(width, height);
-
-        // Iniciar secuencia introductoria
-        this.mostrarPantallaBienvenida(width, height);
+        this.scene.start('Nivel4Scene');
+        return;
     }
 
     crearFondoElegante(width, height) {
@@ -397,7 +388,7 @@ class ContextoScene extends Phaser.Scene {
                         this.pasoActual++;
                         this.mostrarExplicacionMaquina(width, height);
                     } else {
-                        this.scene.start('MinijuegoScene');
+                        this.scene.start('Nivel4Scene');
                     }
                 }
             });

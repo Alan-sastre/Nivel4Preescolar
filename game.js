@@ -24,11 +24,7 @@ var config = {
     roundPixels: true,
     willReadFrequently: true,
   },
-  scene: [
-    ContextoScene,
-    MinijuegoScene,
-  ],
-
+  scene: [Nivel4Scene],
 };
 
 // Crear el contenedor del juego
